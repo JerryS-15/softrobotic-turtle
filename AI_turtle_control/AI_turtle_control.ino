@@ -24,12 +24,14 @@ unsigned long valve6StartTime = 0;
 bool valve1State = false; // left wing
 bool valve2State = false; // right wing
 bool valve3State = false;
-bool valve4State = false;
+bool valve4State = false; // Body + Bubbling
 bool valve5State = false; // For tail Upper part
 bool valve6State = false; // For tail Bottom part
 
 bool isCrawlingLeft = false;
 bool isCrawlingRight = false;
+
+bool isCute = false;
 
 // Swim state & timer
 bool isSwimming = false;
@@ -60,7 +62,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("System ready. Send commands to control valves.");
   Serial.println("Commands: Valve_X on/off, manual control on/off, set all Valves, clear all Valves");
-  Serial.println("Turtle: crawl, swim, cl, stop");
+  Serial.println("Turtle: crawl, swim, cl, cr, cute, sc, stop");
 }
 
 void loop() {
@@ -94,6 +96,10 @@ void loop() {
 
   if (isCrawlingRight) {
     executeCrawlRightTurning(300, 500);
+  }
+
+  if (isCute) {
+    beCute(5000);
   }
 }
 
@@ -167,8 +173,17 @@ void processCommand(String command) {
     isSwimming = false;
     isCrawlingLeft = false;
     isCrawlingRight = false;
+    isCute = false;
     setAllValves(LOW);
     Serial.println("Execution stops.");
+  }
+  else if (command.equalsIgnoreCase("cute")) {
+    isCute = true;
+    Serial.println("AI Turtle is acting cute.");
+  }
+  else if (command.equalsIgnoreCase("sc")) {
+    isCute = false;
+    Serial.println("AI Turtle stop acting cute.");
   }
   else {
     Serial.println("Unknown command.");
@@ -278,6 +293,18 @@ void executeCrawl(int hands_dur, int tail_dur) {
     setValve(6, LOW);
     valve6State = false;
   }
+
+  // if (!valve4State) {
+  //   setValve(4, HIGH);
+  //   valve4State = true;
+  //   valve4StartTime = millis();
+  //   Serial.print("Body (valve 4) is on!");
+  // }
+  // else if (valve4State && millis() - valve4StartTime >= tail_dur) {
+  //   setValve(4, HIGH);
+  //   valve4State = true;
+  //   valve4StartTime = millis();
+  // }
 
 }
 
@@ -445,4 +472,17 @@ void executeCrawlRightTurning(int hands_dur, int tail_dur) {
     valve6State = false;
   }
 
+}
+
+void beCute(int cuteTime) {
+
+  setValve(4, HIGH);
+  valve4State = true;
+  valve4StartTime = millis();
+  Serial.print("Body (valve 4) is on!");
+
+  if (millis() - valve4StartTime >= cuteTime) {
+    setValve(4, LOW);
+    valve4State = false;
+  }
 }
