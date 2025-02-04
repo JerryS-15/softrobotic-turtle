@@ -248,24 +248,23 @@ void executeCrawl(int hands_dur, int tail_dur) {
   }
 
   if (!valve5State && !valve6State) {
-    // setValve(5, HIGH);
-    
-    setValve(6, HIGH);
-    
-    // 0204
+    // For tail flapping
     setValve(5, HIGH);
+    
+    // For always pumping 6
+    // setValve(6, HIGH);
 
-    // valve5State = true;
-    // valve5StartTime = millis();
+    // For tail flapping
+    valve5State = true;
+    valve5StartTime = millis();
+
     Serial.print("Tail (side 5) move for ");
     Serial.print(tail_dur);
     Serial.println(" ms");
   }
   else if (valve5State && millis() - valve5StartTime >= tail_dur) {
-    // setValve(5, LOW);
-
-    // 0204
-    setValve(5, HIGH);
+    // For tail flapping
+    setValve(5, LOW);
 
     valve5State = false;
     setValve(6, HIGH);
@@ -276,9 +275,6 @@ void executeCrawl(int hands_dur, int tail_dur) {
     Serial.println(" ms");
   }
   else if (valve6State && millis() - valve6StartTime >= tail_dur) {
-    //0204
-    setValve(5, LOW);
-
     setValve(6, LOW);
     valve6State = false;
   }
