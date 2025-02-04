@@ -85,7 +85,7 @@ void loop() {
   }
 
   if (isSwimming) {
-    executeSwim(500, 700);
+    executeSwim(1000, 300);
   }
 
   if (isCrawlingLeft) {
@@ -248,18 +248,25 @@ void executeCrawl(int hands_dur, int tail_dur) {
   }
 
   if (!valve5State && !valve6State) {
-    setValve(5, HIGH);
+    // setValve(5, HIGH);
     
-    // setValve(6, HIGH);
+    setValve(6, HIGH);
+    
+    // 0204
+    setValve(5, HIGH);
 
-    valve5State = true;
-    valve5StartTime = millis();
+    // valve5State = true;
+    // valve5StartTime = millis();
     Serial.print("Tail (side 5) move for ");
     Serial.print(tail_dur);
     Serial.println(" ms");
   }
   else if (valve5State && millis() - valve5StartTime >= tail_dur) {
-    setValve(5, LOW);
+    // setValve(5, LOW);
+
+    // 0204
+    setValve(5, HIGH);
+
     valve5State = false;
     setValve(6, HIGH);
     valve6State = true;
@@ -269,6 +276,9 @@ void executeCrawl(int hands_dur, int tail_dur) {
     Serial.println(" ms");
   }
   else if (valve6State && millis() - valve6StartTime >= tail_dur) {
+    //0204
+    setValve(5, LOW);
+
     setValve(6, LOW);
     valve6State = false;
   }
@@ -300,6 +310,9 @@ void executeSwim(int hands_dur, int tail_dur) {
   //   Serial.println(" ms");
   // }
   // else if (swimValve12State && millis() - swimValve12StartTime >= hands_dur) {
+  //   // setValve(1, HIGH);
+  //   // setValve(2, HIGH);
+
   //   setValve(1, LOW);
   //   setValve(2, LOW);
   //   swimValve12State = false;
