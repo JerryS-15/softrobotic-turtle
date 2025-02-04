@@ -81,7 +81,7 @@ void loop() {
   }
 
   if (isCrawling) {
-    executeCrawl(300, 5000);
+    executeCrawl(300, 300);
   }
 
   if (isSwimming) {
@@ -248,18 +248,18 @@ void executeCrawl(int hands_dur, int tail_dur) {
   }
 
   if (!valve5State && !valve6State) {
-    // setValve(5, HIGH);
+    setValve(5, HIGH);
     
-    setValve(6, HIGH);
+    // setValve(6, HIGH);
 
-    // valve5State = true;
-    // valve5StartTime = millis();
+    valve5State = true;
+    valve5StartTime = millis();
     Serial.print("Tail (side 5) move for ");
     Serial.print(tail_dur);
     Serial.println(" ms");
   }
   else if (valve5State && millis() - valve5StartTime >= tail_dur) {
-    // setValve(5, LOW);
+    setValve(5, LOW);
     valve5State = false;
     setValve(6, HIGH);
     valve6State = true;
@@ -279,34 +279,34 @@ void executeCrawl(int hands_dur, int tail_dur) {
 // Using Valve 1, 2, 5, 6
 void executeSwim(int hands_dur, int tail_dur) {
 
-  if (!swimValve12State && !swimValveInitState) {
-    // setValve(1, HIGH);
-    // setValve(2, HIGH);  // comment off if let valve 1,2 always on
+  // if (!swimValve12State && !swimValveInitState) {
+  //   // setValve(1, HIGH);
+  //   // setValve(2, HIGH);  // comment off if let valve 1,2 always on
 
-    swimValveInitState = true;
-    swimValveInitStartTime = millis();
-    Serial.print("HANDS SWIM STARTING.");
-    // Serial.print(hands_dur);
-    // Serial.println(" ms");
-  }
-  else if (swimValveInitState && millis() - swimValveInitStartTime >= hands_dur) {
-    setValve(1, HIGH);
-    setValve(2, HIGH);
-    swimValve12State = true;
-    swimValveInitState = false;
-    swimValve12StartTime = millis();
-    Serial.print("Both hands move for ");
-    Serial.print(hands_dur);
-    Serial.println(" ms");
-  }
-  else if (swimValve12State && millis() - swimValve12StartTime >= hands_dur) {
-    setValve(1, LOW);
-    setValve(2, LOW);
-    swimValve12State = false;
-    Serial.print("Both hands rest for ");
-    Serial.print(hands_dur);
-    Serial.println(" ms");
-  }
+  //   swimValveInitState = true;
+  //   swimValveInitStartTime = millis();
+  //   Serial.print("HANDS SWIM STARTING.");
+  //   // Serial.print(hands_dur);
+  //   // Serial.println(" ms");
+  // }
+  // else if (swimValveInitState && millis() - swimValveInitStartTime >= hands_dur) {
+  //   setValve(1, HIGH);
+  //   setValve(2, HIGH);
+  //   swimValve12State = true;
+  //   swimValveInitState = false;
+  //   swimValve12StartTime = millis();
+  //   Serial.print("Both hands move for ");
+  //   Serial.print(hands_dur);
+  //   Serial.println(" ms");
+  // }
+  // else if (swimValve12State && millis() - swimValve12StartTime >= hands_dur) {
+  //   setValve(1, LOW);
+  //   setValve(2, LOW);
+  //   swimValve12State = false;
+  //   Serial.print("Both hands rest for ");
+  //   Serial.print(hands_dur);
+  //   Serial.println(" ms");
+  // }
 
   if (!swimValve5State && !swimValve6State) {
     setValve(5, HIGH);
